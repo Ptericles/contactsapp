@@ -1,0 +1,67 @@
+
+
+CREATE TABLE Contacts (
+contact_id BIGINT(10) NOT NULL UNIQUE PRIMARY KEY,
+first_name VARCHAR(100) NOT NULL,
+last_name VARCHAR(100) NOT NULL,
+username VARCHAR(100) NOT NULL,
+email_address VARCHAR(100) NOT NULL,
+liason_primary BIGINT(10) NOT NULL DEFAULT 0,
+phone TINYINT(10) NOT NULL,
+liason_secondary BIGINT(10) NOT NULL,
+address VARCHAR(45),
+address_secondary VARCHAR(45) NOT NULL,
+city VARCHAR(45) NOT NULL,
+state_code CHAR(2) NOT NULL COMMENT 'CA',
+zip_code VARCHAR(9) NOT NULL COMMENT '12345-6789',
+notes LONGTEXT NOT NULL,
+phone_num_type_id TINYINT)
+COMMENT = 'Table with users';
+/**
+@table: Contacts
+@description: Table with users
+@location: 720.0 1466.5
+@columnsDescription:  contact_id() first_name() last_name() username() email_address() liason_primary() phone() liason_secondary() address() address_secondary() city() state_code(CA) zip_code(12345-6789) notes() phone_num_type_id()
+@colors: title(#FFD1D1D1) contact_id(#FFFAFAFA) first_name(#FFFAFAFA) last_name(#FFFAFAFA) username(#FFFAFAFA) email_address(#FFFAFAFA) liason_primary(#FFFAFAFA) phone(#FFFAFAFA) liason_secondary(#FFFAFAFA) address(#FFFAFAFA) address_secondary(#FFFAFAFA) city(#FFFAFAFA) state_code(#FFFAFAFA) zip_code(#FFFAFAFA) notes(#FFFAFAFA) phone_num_type_id(#FFFAFAFA)
+*/
+
+CREATE TABLE Liasons (
+liason_id BIGINT(10) NOT NULL DEFAULT 0 PRIMARY KEY,
+first_name VARCHAR(100) NOT NULL,
+last_name VARCHAR(100) NOT NULL,
+username VARCHAR(32) NOT NULL,
+email_address VARCHAR(100) NOT NULL,
+phone SMALLINT(10) NOT NULL,
+notes LONGTEXT NOT NULL);
+/**
+@table: Liasons
+@location: 1438.7734 1702.5938
+@columnsDescription:  liason_id() first_name() last_name() username() email_address() phone() notes()
+@colors: title(#FFD1D1D1) liason_id(#FFFAFAFA) first_name(#FFFAFAFA) last_name(#FFFAFAFA) username(#FFFAFAFA) email_address(#FFFAFAFA) phone(#FFFAFAFA) notes(#FFFAFAFA)
+*/
+
+CREATE TABLE phone_number_type (
+phone_num_type_id TINYINT UNSIGNED AUTO_INCREMENT NOT NULL UNIQUE PRIMARY KEY,
+phone_num_type_name VARCHAR(45) NOT NULL UNIQUE);
+/**
+@table: phone_number_type
+@location: 1293.844 1996.5005
+@columnsDescription:  phone_num_type_id() phone_num_type_name()
+@colors: title(#FFD1D1D1) phone_num_type_id(#FFFAFAFA) phone_num_type_name(#FFFAFAFA)
+*/
+
+CREATE TABLE phone_numbers (
+phone_num TINYINT(10) NOT NULL UNIQUE PRIMARY KEY,
+phone_num_type_id TINYINT(100) NOT NULL);
+/**
+@table: phone_numbers
+@location: 1282.844 1954.5005
+@columnsDescription:  phone_num() phone_num_type_id()
+@colors: title(#FFD1D1D1) phone_num(#FFFAFAFA) phone_num_type_id(#FFFAFAFA)
+*/
+
+ALTER TABLE Contacts ADD CONSTRAINT Contacts_liason_primary_Liasons_liason_id FOREIGN KEY (liason_primary) REFERENCES Liasons(liason_id);
+ALTER TABLE Contacts ADD CONSTRAINT Contacts_phone_phone_numbers_phone_num FOREIGN KEY (phone) REFERENCES phone_numbers(phone_num);
+ALTER TABLE Contacts ADD CONSTRAINT Contacts_liason_secondary_Liasons_liason_id FOREIGN KEY (liason_secondary) REFERENCES Liasons(liason_id);
+ALTER TABLE Contacts ADD CONSTRAINT Contacts_phone_num_type_id_phone_number_type_phone_num_type_id FOREIGN KEY (phone_num_type_id) REFERENCES phone_number_type(phone_num_type_id);
+ALTER TABLE phone_numbers ADD CONSTRAINT phone_numbers_phone_num_type_id_phone_number_type_phone_num_type_id FOREIGN KEY (phone_num_type_id) REFERENCES phone_number_type(phone_num_type_id);
